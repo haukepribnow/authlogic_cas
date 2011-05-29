@@ -3,20 +3,36 @@ AuthlogicCas
 
 AuthlogicCas is a CAS (a cross-site authentication system designed at Yale for single sign-on authentication) add-on for the Authlogic authentication system.
 
-This extension requires the Rubycas-client plugin and a working CAS server with which it will communicate for CAS authentication.  You can get this plugin at http://code.google.com/p/rubycas-client/  By installing and configuring your CAS client as outlined in the Rubycas-client documentation, the session variable, session[:cas_user], containing the login credentials of a CAS-authenticated user, will be presented to this adapter.
+This extension requires the Rubycas-client plugin and a working CAS server with which it will communicate for CAS authentication.
 
-When using this extension, calls to persist your Authlogic session should work seamlessly, such as:
+Attention: This add-on works only with Rails!
 
-UserSession.find
 
-You will need to add a session persistence before_filter in your controller like
+Install
+=======
 
-before_filter CASClient::Frameworks::Rails::Filter
+1. Install the rubycas-client plugin. You can download it from here:
+	http://code.google.com/p/rubycas-client/
 
- or
+2. Install this plugin.
 
-before_filter CASClient::Frameworks::Rails::GatewayFilter
+3. In your config/environment.rb make sure that the rubycas-client plugin will be loaded before this plugin. You can ensure that by adding something like this to the Rails::Initializer.run block:
+	config.plugins = [ :casclient, :authlogic_cas, :all ]
 
-to set session[:cas_user] for use with this add-on.
+4. Add the rubycas-client filter settings at the end of the config/environment.rb:
+	CASClient::Frameworks::Rails::Filter.configure(
+	  :cas_base_url => "https://your.cas.server.here/",
+	  :enable_single_sign_out => true
+	)
+
+
+
+Copyright (c) 2011 Hauke Pribnow, released under the MIT license
+
+
+----------------------------------
+Original version of authlogic_cas:
+
+http://github.com/thurisaz/authlogic_cas
 
 Copyright (c) 2009 Rich Davis, released under the MIT license
